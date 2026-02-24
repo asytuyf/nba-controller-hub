@@ -5,6 +5,11 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Next.js](https://img.shields.io/badge/Next.js-15-black)](https://nextjs.org/)
 [![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-3.0-blue)](https://tailwindcss.com/)
+[![Vercel](https://img.shields.io/badge/Vercel-Deployed-black)](https://nba-controller-fx9qamnif-asytuyfs-projects.vercel.app)
+
+## 🌐 Live Demo
+
+Check out the live deployment here: **[NBA Controller Hub Live](https://nba-controller-fx9qamnif-asytuyfs-projects.vercel.app)**
 
 ## 🌟 Overview
 
