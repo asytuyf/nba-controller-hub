@@ -1,36 +1,74 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 🏀 NBA Controller Hub
 
-## Getting Started
+> **Experience the NBA Universe like never before - Controlled by you.**
 
-First, run the development server:
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![Next.js](https://img.shields.io/badge/Next.js-15-black)](https://nextjs.org/)
+[![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-3.0-blue)](https://tailwindcss.com/)
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+## 🌟 Overview
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Welcome to the **NBA Controller Hub**, a futuristic, gamepad-first web application that lets you explore the NBA landscape with the tactile feel of a console interface. Navigate the map, check team rosters, and track your basketball workouts using your controller or keyboard.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## 🎮 Key Features
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+-   **Interactive Map Navigation**: seamless exploration of all 30 NBA teams across the US map.
+-   **Gamepad Support**: Fully optimized for game controllers (D-Pad navigation, button interactions).
+-   **Team Hubs**: Detailed views for each franchise, including rosters and stats.
+-   **Workout Tracking**: Log and visualize your training sessions.
+-   **Immersive UI**: Dark mode aesthetic with neon glows, glassmorphism, and smooth Framer Motion animations.
 
-## Learn More
+## 🚀 Getting Started
 
-To learn more about Next.js, take a look at the following resources:
+### Prerequisites
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+-   Node.js 18+
+-   npm or yarn
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+### Installation
 
-## Deploy on Vercel
+1.  **Clone the repository:**
+    ```bash
+    git clone https://github.com/yourusername/nba-controller-hub.git
+    cd nba-controller-hub
+    ```
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+2.  **Install dependencies:**
+    ```bash
+    npm install
+    # or
+    yarn install
+    ```
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+3.  **Run the development server:**
+    ```bash
+    npm run dev
+    # or
+    yarn dev
+    ```
+
+4.  **Open in your browser:**
+    Navigate to [http://localhost:3000](http://localhost:3000). Connect your gamepad and start exploring!
+
+## 🕹️ Controls
+
+| Action | Gamepad | Keyboard |
+| :--- | :---: | :---: |
+| **Navigate** | D-Pad / Left Stick | Arrow Keys |
+| **Select** | A / Cross | Enter |
+| **Back** | B / Circle | Esc / Backspace |
+
+## 🛠️ Tech Stack
+
+-   **Framework**: [Next.js 15](https://nextjs.org/) (App Router)
+-   **Styling**: [Tailwind CSS](https://tailwindcss.com/)
+-   **Animations**: [Framer Motion](https://www.framer.com/motion/)
+-   **Icons**: [Lucide React](https://lucide.dev/)
+
+## 🤝 Contributing
+
+Contributions are welcome! Feel free to open issues or submit pull requests.
+
+## 📄 License
+
+This project is licensed under the MIT License.
