@@ -1,4 +1,5 @@
-# 🏀 NBA Controller Hub {still under development}
+# Drift Hub 
+{still under development}
 
 > **A personal project to explore NBA teams with an in site gamepad and track my gym sessions basically anything sporty. just for fun.**
 
