@@ -5,54 +5,54 @@ import { useRouter } from "next/navigation";
 import { useInput } from "@/lib/gamepad";
 import clsx from "clsx";
 
-// NBA teams - CORRECT coordinates based on actual SVG state positions (viewBox 0 0 1000 589)
+// NBA teams - coordinates shifted right to be on land (viewBox 0 0 1000 589)
 const NBA_TEAMS = [
-  { id: 25, abbr: "POR", name: "Trail Blazers", city: "Portland", color: "#E03A3E", x: 175, y: 95, conference: "West", standing: 10, logo: "https://a.espncdn.com/i/teamlogos/nba/500/por.png" },
-  { id: 10, abbr: "GSW", name: "Warriors", city: "Golden State", color: "#1D428A", x: 158, y: 220, conference: "West", standing: 4, logo: "https://a.espncdn.com/i/teamlogos/nba/500/gs.png" },
-  { id: 26, abbr: "SAC", name: "Kings", city: "Sacramento", color: "#5A2D81", x: 168, y: 200, conference: "West", standing: 7, logo: "https://a.espncdn.com/i/teamlogos/nba/500/sac.png" },
-  { id: 13, abbr: "LAC", name: "Clippers", city: "LA", color: "#C8102E", x: 172, y: 330, conference: "West", standing: 6, logo: "https://a.espncdn.com/i/teamlogos/nba/500/lac.png" },
-  { id: 14, abbr: "LAL", name: "Lakers", city: "Los Angeles", color: "#552583", x: 162, y: 320, conference: "West", standing: 5, logo: "https://a.espncdn.com/i/teamlogos/nba/500/lal.png" },
-  { id: 24, abbr: "PHX", name: "Suns", city: "Phoenix", color: "#1D1160", x: 260, y: 355, conference: "West", standing: 8, logo: "https://a.espncdn.com/i/teamlogos/nba/500/phx.png" },
-  { id: 29, abbr: "UTA", name: "Jazz", city: "Utah", color: "#002B5C", x: 295, y: 240, conference: "West", standing: 12, logo: "https://a.espncdn.com/i/teamlogos/nba/500/utah.png" },
-  { id: 8, abbr: "DEN", name: "Nuggets", city: "Denver", color: "#0E2240", x: 380, y: 280, conference: "West", standing: 1, logo: "https://a.espncdn.com/i/teamlogos/nba/500/den.png" },
-  { id: 18, abbr: "MIN", name: "Timberwolves", city: "Minnesota", color: "#0C2340", x: 530, y: 130, conference: "West", standing: 3, logo: "https://a.espncdn.com/i/teamlogos/nba/500/min.png" },
-  { id: 21, abbr: "OKC", name: "Thunder", city: "Oklahoma City", color: "#007AC1", x: 480, y: 340, conference: "West", standing: 2, logo: "https://a.espncdn.com/i/teamlogos/nba/500/okc.png" },
-  { id: 7, abbr: "DAL", name: "Mavericks", city: "Dallas", color: "#00538C", x: 500, y: 385, conference: "West", standing: 9, logo: "https://a.espncdn.com/i/teamlogos/nba/500/dal.png" },
-  { id: 27, abbr: "SAS", name: "Spurs", city: "San Antonio", color: "#C4CED4", x: 470, y: 450, conference: "West", standing: 14, logo: "https://a.espncdn.com/i/teamlogos/nba/500/sa.png" },
-  { id: 11, abbr: "HOU", name: "Rockets", city: "Houston", color: "#CE1141", x: 535, y: 435, conference: "West", standing: 11, logo: "https://a.espncdn.com/i/teamlogos/nba/500/hou.png" },
-  { id: 19, abbr: "NOP", name: "Pelicans", city: "New Orleans", color: "#0C2340", x: 600, y: 420, conference: "West", standing: 13, logo: "https://a.espncdn.com/i/teamlogos/nba/500/no.png" },
-  { id: 15, abbr: "MEM", name: "Grizzlies", city: "Memphis", color: "#5D76A9", x: 630, y: 335, conference: "West", standing: 15, logo: "https://a.espncdn.com/i/teamlogos/nba/500/mem.png" },
-  { id: 5, abbr: "CHI", name: "Bulls", city: "Chicago", color: "#CE1141", x: 625, y: 210, conference: "East", standing: 9, logo: "https://a.espncdn.com/i/teamlogos/nba/500/chi.png" },
-  { id: 17, abbr: "MIL", name: "Bucks", city: "Milwaukee", color: "#00471B", x: 615, y: 175, conference: "East", standing: 3, logo: "https://a.espncdn.com/i/teamlogos/nba/500/mil.png" },
-  { id: 12, abbr: "IND", name: "Pacers", city: "Indiana", color: "#002D62", x: 675, y: 250, conference: "East", standing: 6, logo: "https://a.espncdn.com/i/teamlogos/nba/500/ind.png" },
-  { id: 9, abbr: "DET", name: "Pistons", city: "Detroit", color: "#C8102E", x: 710, y: 185, conference: "East", standing: 14, logo: "https://a.espncdn.com/i/teamlogos/nba/500/det.png" },
-  { id: 6, abbr: "CLE", name: "Cavaliers", city: "Cleveland", color: "#860038", x: 755, y: 215, conference: "East", standing: 2, logo: "https://a.espncdn.com/i/teamlogos/nba/500/cle.png" },
+  { id: 25, abbr: "POR", name: "Trail Blazers", city: "Portland", color: "#E03A3E", x: 195, y: 95, conference: "West", standing: 10, logo: "https://a.espncdn.com/i/teamlogos/nba/500/por.png" },
+  { id: 10, abbr: "GSW", name: "Warriors", city: "Golden State", color: "#1D428A", x: 178, y: 220, conference: "West", standing: 4, logo: "https://a.espncdn.com/i/teamlogos/nba/500/gs.png" },
+  { id: 26, abbr: "SAC", name: "Kings", city: "Sacramento", color: "#5A2D81", x: 185, y: 200, conference: "West", standing: 7, logo: "https://a.espncdn.com/i/teamlogos/nba/500/sac.png" },
+  { id: 13, abbr: "LAC", name: "Clippers", city: "LA", color: "#C8102E", x: 192, y: 325, conference: "West", standing: 6, logo: "https://a.espncdn.com/i/teamlogos/nba/500/lac.png" },
+  { id: 14, abbr: "LAL", name: "Lakers", city: "Los Angeles", color: "#552583", x: 182, y: 315, conference: "West", standing: 5, logo: "https://a.espncdn.com/i/teamlogos/nba/500/lal.png" },
+  { id: 24, abbr: "PHX", name: "Suns", city: "Phoenix", color: "#1D1160", x: 275, y: 355, conference: "West", standing: 8, logo: "https://a.espncdn.com/i/teamlogos/nba/500/phx.png" },
+  { id: 29, abbr: "UTA", name: "Jazz", city: "Utah", color: "#002B5C", x: 310, y: 240, conference: "West", standing: 12, logo: "https://a.espncdn.com/i/teamlogos/nba/500/utah.png" },
+  { id: 8, abbr: "DEN", name: "Nuggets", city: "Denver", color: "#0E2240", x: 395, y: 275, conference: "West", standing: 1, logo: "https://a.espncdn.com/i/teamlogos/nba/500/den.png" },
+  { id: 18, abbr: "MIN", name: "Timberwolves", city: "Minnesota", color: "#0C2340", x: 545, y: 130, conference: "West", standing: 3, logo: "https://a.espncdn.com/i/teamlogos/nba/500/min.png" },
+  { id: 21, abbr: "OKC", name: "Thunder", city: "Oklahoma City", color: "#007AC1", x: 495, y: 340, conference: "West", standing: 2, logo: "https://a.espncdn.com/i/teamlogos/nba/500/okc.png" },
+  { id: 7, abbr: "DAL", name: "Mavericks", city: "Dallas", color: "#00538C", x: 515, y: 385, conference: "West", standing: 9, logo: "https://a.espncdn.com/i/teamlogos/nba/500/dal.png" },
+  { id: 27, abbr: "SAS", name: "Spurs", city: "San Antonio", color: "#C4CED4", x: 485, y: 445, conference: "West", standing: 14, logo: "https://a.espncdn.com/i/teamlogos/nba/500/sa.png" },
+  { id: 11, abbr: "HOU", name: "Rockets", city: "Houston", color: "#CE1141", x: 550, y: 430, conference: "West", standing: 11, logo: "https://a.espncdn.com/i/teamlogos/nba/500/hou.png" },
+  { id: 19, abbr: "NOP", name: "Pelicans", city: "New Orleans", color: "#0C2340", x: 615, y: 415, conference: "West", standing: 13, logo: "https://a.espncdn.com/i/teamlogos/nba/500/no.png" },
+  { id: 15, abbr: "MEM", name: "Grizzlies", city: "Memphis", color: "#5D76A9", x: 645, y: 335, conference: "West", standing: 15, logo: "https://a.espncdn.com/i/teamlogos/nba/500/mem.png" },
+  { id: 5, abbr: "CHI", name: "Bulls", city: "Chicago", color: "#CE1141", x: 640, y: 210, conference: "East", standing: 9, logo: "https://a.espncdn.com/i/teamlogos/nba/500/chi.png" },
+  { id: 17, abbr: "MIL", name: "Bucks", city: "Milwaukee", color: "#00471B", x: 630, y: 175, conference: "East", standing: 3, logo: "https://a.espncdn.com/i/teamlogos/nba/500/mil.png" },
+  { id: 12, abbr: "IND", name: "Pacers", city: "Indiana", color: "#002D62", x: 690, y: 250, conference: "East", standing: 6, logo: "https://a.espncdn.com/i/teamlogos/nba/500/ind.png" },
+  { id: 9, abbr: "DET", name: "Pistons", city: "Detroit", color: "#C8102E", x: 725, y: 185, conference: "East", standing: 14, logo: "https://a.espncdn.com/i/teamlogos/nba/500/det.png" },
+  { id: 6, abbr: "CLE", name: "Cavaliers", city: "Cleveland", color: "#860038", x: 765, y: 210, conference: "East", standing: 2, logo: "https://a.espncdn.com/i/teamlogos/nba/500/cle.png" },
   { id: 2, abbr: "BOS", name: "Celtics", city: "Boston", color: "#007A33", x: 940, y: 145, conference: "East", standing: 1, logo: "https://a.espncdn.com/i/teamlogos/nba/500/bos.png" },
   { id: 20, abbr: "NYK", name: "Knicks", city: "New York", color: "#F58426", x: 900, y: 170, conference: "East", standing: 4, logo: "https://a.espncdn.com/i/teamlogos/nba/500/ny.png" },
   { id: 3, abbr: "BKN", name: "Nets", city: "Brooklyn", color: "#000000", x: 910, y: 180, conference: "East", standing: 12, logo: "https://a.espncdn.com/i/teamlogos/nba/500/bkn.png" },
-  { id: 23, abbr: "PHI", name: "76ers", city: "Philadelphia", color: "#006BB6", x: 880, y: 205, conference: "East", standing: 5, logo: "https://a.espncdn.com/i/teamlogos/nba/500/phi.png" },
-  { id: 30, abbr: "WAS", name: "Wizards", city: "Washington", color: "#002B5C", x: 855, y: 245, conference: "East", standing: 15, logo: "https://a.espncdn.com/i/teamlogos/nba/500/wsh.png" },
-  { id: 4, abbr: "CHA", name: "Hornets", city: "Charlotte", color: "#1D1160", x: 810, y: 305, conference: "East", standing: 13, logo: "https://a.espncdn.com/i/teamlogos/nba/500/cha.png" },
-  { id: 1, abbr: "ATL", name: "Hawks", city: "Atlanta", color: "#E03A3E", x: 765, y: 355, conference: "East", standing: 8, logo: "https://a.espncdn.com/i/teamlogos/nba/500/atl.png" },
-  { id: 22, abbr: "ORL", name: "Magic", city: "Orlando", color: "#0077C0", x: 805, y: 435, conference: "East", standing: 7, logo: "https://a.espncdn.com/i/teamlogos/nba/500/orl.png" },
-  { id: 16, abbr: "MIA", name: "Heat", city: "Miami", color: "#98002E", x: 845, y: 505, conference: "East", standing: 10, logo: "https://a.espncdn.com/i/teamlogos/nba/500/mia.png" },
+  { id: 23, abbr: "PHI", name: "76ers", city: "Philadelphia", color: "#006BB6", x: 880, y: 200, conference: "East", standing: 5, logo: "https://a.espncdn.com/i/teamlogos/nba/500/phi.png" },
+  { id: 30, abbr: "WAS", name: "Wizards", city: "Washington", color: "#002B5C", x: 855, y: 240, conference: "East", standing: 15, logo: "https://a.espncdn.com/i/teamlogos/nba/500/wsh.png" },
+  { id: 4, abbr: "CHA", name: "Hornets", city: "Charlotte", color: "#1D1160", x: 815, y: 300, conference: "East", standing: 13, logo: "https://a.espncdn.com/i/teamlogos/nba/500/cha.png" },
+  { id: 1, abbr: "ATL", name: "Hawks", city: "Atlanta", color: "#E03A3E", x: 775, y: 350, conference: "East", standing: 8, logo: "https://a.espncdn.com/i/teamlogos/nba/500/atl.png" },
+  { id: 22, abbr: "ORL", name: "Magic", city: "Orlando", color: "#0077C0", x: 810, y: 430, conference: "East", standing: 7, logo: "https://a.espncdn.com/i/teamlogos/nba/500/orl.png" },
+  { id: 16, abbr: "MIA", name: "Heat", city: "Miami", color: "#98002E", x: 845, y: 500, conference: "East", standing: 10, logo: "https://a.espncdn.com/i/teamlogos/nba/500/mia.png" },
 ];
 
-// State stamps/decorations
+// State stamps/decorations - shifted to match land
 const STATE_STAMPS = [
-  { x: 185, y: 60, text: "☔", title: "Seattle" },
-  { x: 155, y: 270, text: "🌉", title: "Bay Area" },
-  { x: 180, y: 350, text: "🎬", title: "Hollywood" },
-  { x: 240, y: 320, text: "🌵", title: "Desert" },
-  { x: 320, y: 220, text: "🏔️", title: "Rockies" },
-  { x: 520, y: 420, text: "🤠", title: "Texas" },
-  { x: 650, y: 380, text: "🎺", title: "Jazz" },
-  { x: 560, y: 160, text: "🌽", title: "Midwest" },
-  { x: 700, y: 140, text: "🏭", title: "Motor City" },
-  { x: 870, y: 150, text: "🗽", title: "NYC" },
-  { x: 920, y: 130, text: "🦞", title: "Boston" },
-  { x: 830, y: 480, text: "🏖️", title: "Miami Beach" },
-  { x: 760, y: 395, text: "🍑", title: "Georgia" },
+  { x: 205, y: 55, text: "☔", title: "Seattle" },
+  { x: 175, y: 265, text: "🌉", title: "Bay Area" },
+  { x: 200, y: 355, text: "🎬", title: "Hollywood" },
+  { x: 260, y: 310, text: "🌵", title: "Desert" },
+  { x: 350, y: 220, text: "🏔️", title: "Rockies" },
+  { x: 540, y: 400, text: "🤠", title: "Texas" },
+  { x: 665, y: 375, text: "🎺", title: "Jazz" },
+  { x: 580, y: 160, text: "🌽", title: "Midwest" },
+  { x: 715, y: 145, text: "🏭", title: "Motor City" },
+  { x: 870, y: 145, text: "🗽", title: "NYC" },
+  { x: 925, y: 125, text: "🦞", title: "Boston" },
+  { x: 835, y: 475, text: "🏖️", title: "Miami Beach" },
+  { x: 770, y: 385, text: "🍑", title: "Georgia" },
 ];
 
 export default function NbaMap() {
@@ -225,20 +225,29 @@ export default function NbaMap() {
         />
       </div>
 
-      {/* Massive 2D pannable map */}
+      {/* Globe curvature container */}
       <div
-        className="absolute"
+        className="absolute inset-0"
         style={{
-          width: `${MAP_SIZE}vw`,
-          height: `${MAP_SIZE * 0.589}vw`,
-          left: "50%",
-          top: "50%",
-          marginLeft: `-${MAP_SIZE / 2}vw`,
-          marginTop: `-${(MAP_SIZE * 0.589) / 2}vw`,
-          transform: `translate(${pan.x}%, ${pan.y}%)`,
-          willChange: "transform",
+          perspective: "1200px",
+          perspectiveOrigin: "50% 50%",
         }}
       >
+        {/* Curved map surface - like Earth's curvature */}
+        <div
+          className="absolute"
+          style={{
+            width: `${MAP_SIZE}vw`,
+            height: `${MAP_SIZE * 0.589}vw`,
+            left: "50%",
+            top: "50%",
+            marginLeft: `-${MAP_SIZE / 2}vw`,
+            marginTop: `-${(MAP_SIZE * 0.589) / 2}vw`,
+            transform: `translate(${pan.x}%, ${pan.y}%) rotateX(25deg)`,
+            transformStyle: "preserve-3d",
+            willChange: "transform",
+          }}
+        >
         {/* USA Map */}
         <svg
           ref={svgRef}
@@ -330,13 +339,14 @@ export default function NbaMap() {
             );
           })}
         </svg>
+        </div>
       </div>
 
-      {/* Vignette */}
+      {/* Subtle edge fade - helps globe effect */}
       <div
         className="absolute inset-0 pointer-events-none"
         style={{
-          background: "radial-gradient(ellipse 70% 70% at center, transparent 20%, rgba(0,0,0,0.85) 100%)",
+          background: "radial-gradient(ellipse 80% 80% at center, transparent 40%, rgba(0,0,0,0.5) 100%)",
         }}
       />
 
