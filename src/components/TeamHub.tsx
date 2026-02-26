@@ -3,6 +3,7 @@
 import { useInput } from "@/lib/gamepad";
 import BackButton from "@/components/BackButton";
 import { useEffect, useState, useRef } from "react";
+import { useRouter } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import { TrendingUp, TrendingDown, Clock, MapPin, Users, Calendar } from "lucide-react";
 import {
@@ -12,7 +13,7 @@ import {
   didTeamWin,
   getCurrentSeason,
 } from "@/lib/nba-api";
-import { getTeamById, type NbaGame, type NbaPlayer } from "@/types/nba";
+import { getTeamById, getTeamLogo, type NbaGame, type NbaPlayer } from "@/types/nba";
 
 type ViewMode = "games" | "roster";
 
@@ -20,7 +21,19 @@ interface TeamHubProps {
   teamId: number;
 }
 
+// Convert height from feet-inches to cm
+function convertHeightToMetric(height: string): string {
+  const match = height.match(/(\d+)-(\d+)/);
+  if (!match) return height;
+  const feet = parseInt(match[1]);
+  const inches = parseInt(match[2]);
+  const totalInches = feet * 12 + inches;
+  const cm = Math.round(totalInches * 2.54);
+  return `${cm} cm`;
+}
+
 export default function TeamHub({ teamId }: TeamHubProps) {
+  const router = useRouter();
   const { input, vibrate } = useInput();
   const [viewMode, setViewMode] = useState<ViewMode>("games");
   const [focusedIndex, setFocusedIndex] = useState(0);
@@ -89,7 +102,14 @@ export default function TeamHub({ teamId }: TeamHubProps) {
       vibrate(50, 0.5, 0);
       lastInputTime.current = now;
     }
-  }, [input, viewMode, games.length, players.length, vibrate]);
+
+    // Circle button (button 1) - back to map
+    if (buttons[1] && now - lastInputTime.current > 300) {
+      vibrate(50, 0.4, 0);
+      router.push("/nba");
+      lastInputTime.current = now;
+    }
+  }, [input, viewMode, games.length, players.length, vibrate, router]);
 
   if (!team) {
     return (
@@ -120,16 +140,22 @@ export default function TeamHub({ teamId }: TeamHubProps) {
 
       {/* Header */}
       <div className="flex items-center justify-between mb-8 max-w-6xl mx-auto w-full relative z-10">
-        <div className="flex items-center gap-4">
+        <div className="flex items-center gap-5">
+          {/* Team Logo */}
           <div
-            className="w-14 h-14 rounded-2xl flex items-center justify-center text-xl font-black border-2 shadow-lg"
+            className="w-20 h-20 rounded-2xl flex items-center justify-center p-2 border-2 shadow-xl"
             style={{
-              backgroundColor: `${team.color}30`,
-              borderColor: `${team.color}50`,
-              boxShadow: `0 0 30px ${team.color}30`,
+              backgroundColor: `${team.color}15`,
+              borderColor: `${team.color}30`,
+              boxShadow: `0 0 40px ${team.color}25`,
             }}
           >
-            {team.abbr}
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src={team.logo}
+              alt={team.fullName}
+              className="w-full h-full object-contain"
+            />
           </div>
           <div>
             <h1
@@ -138,9 +164,13 @@ export default function TeamHub({ teamId }: TeamHubProps) {
                 backgroundImage: `linear-gradient(to right, ${team.color}, #fff)`,
               }}
             >
-              {team.name}
+              {team.fullName}
             </h1>
-            <p className="text-gray-500 text-sm">{season}-{(season + 1).toString().slice(2)} Season</p>
+            <p className="text-gray-500 text-sm flex items-center gap-2">
+              <span>{team.conference}ern Conference</span>
+              <span className="text-gray-700">•</span>
+              <span>{season}-{(season + 1).toString().slice(2)} Season</span>
+            </p>
           </div>
         </div>
 
@@ -218,7 +248,10 @@ export default function TeamHub({ teamId }: TeamHubProps) {
                   className="space-y-3"
                 >
                   {games.length === 0 ? (
-                    <p className="text-gray-500 text-center py-8">No games found</p>
+                    <div className="text-center py-8">
+                      <p className="text-gray-500 mb-2">No games data available</p>
+                      <p className="text-gray-600 text-xs">Add BALLDONTLIE_API_KEY to .env</p>
+                    </div>
                   ) : (
                     games.map((game, index) => {
                       const isFocused = index === focusedIndex;
@@ -244,8 +277,13 @@ export default function TeamHub({ teamId }: TeamHubProps) {
                         >
                           <div className="flex justify-between items-center">
                             <div className="flex items-center gap-3">
-                              <div className="w-10 h-10 rounded-lg bg-gray-800 flex items-center justify-center text-xs font-bold">
-                                {opponent.abbreviation}
+                              <div className="w-10 h-10 rounded-lg bg-gray-800/50 flex items-center justify-center p-1.5 overflow-hidden">
+                                {/* eslint-disable-next-line @next/next/no-img-element */}
+                                <img
+                                  src={getTeamLogo(opponent.abbreviation)}
+                                  alt={opponent.name}
+                                  className="w-full h-full object-contain"
+                                />
                               </div>
                               <div>
                                 <h3 className={`font-semibold text-sm ${isFocused ? "text-white" : "text-gray-400"}`}>
@@ -291,7 +329,10 @@ export default function TeamHub({ teamId }: TeamHubProps) {
                   className="space-y-3"
                 >
                   {players.length === 0 ? (
-                    <p className="text-gray-500 text-center py-8">No players found</p>
+                    <div className="text-center py-8">
+                      <p className="text-gray-500 mb-2">No roster data available</p>
+                      <p className="text-gray-600 text-xs">Add BALLDONTLIE_API_KEY to .env</p>
+                    </div>
                   ) : (
                     players.map((player, index) => {
                       const isFocused = index === focusedIndex;
@@ -365,17 +406,34 @@ export default function TeamHub({ teamId }: TeamHubProps) {
                       <>
                         {/* Score */}
                         <div className="flex justify-between items-start mb-6">
-                          <div className="flex items-center gap-8">
-                            <div className="text-center">
-                              <p className="text-gray-500 text-xs mb-1 uppercase tracking-wider">{team.name}</p>
-                              <div className="text-5xl font-bold" style={{ color: team.color }}>
-                                {teamScore}
+                          <div className="flex items-center gap-6">
+                            {/* Team */}
+                            <div className="flex items-center gap-4">
+                              <div
+                                className="w-16 h-16 rounded-xl flex items-center justify-center p-2"
+                                style={{ backgroundColor: `${team.color}15` }}
+                              >
+                                {/* eslint-disable-next-line @next/next/no-img-element */}
+                                <img src={team.logo} alt={team.name} className="w-full h-full object-contain" />
+                              </div>
+                              <div className="text-center">
+                                <p className="text-gray-500 text-xs mb-1 uppercase tracking-wider">{team.abbr}</p>
+                                <div className="text-5xl font-bold" style={{ color: team.color }}>
+                                  {teamScore}
+                                </div>
                               </div>
                             </div>
-                            <div className="text-gray-700 text-xl font-light">—</div>
-                            <div className="text-center">
-                              <p className="text-gray-500 text-xs mb-1 uppercase tracking-wider">{opponent.name}</p>
-                              <div className="text-5xl font-bold text-white">{oppScore}</div>
+                            <div className="text-gray-700 text-2xl font-light">—</div>
+                            {/* Opponent */}
+                            <div className="flex items-center gap-4">
+                              <div className="text-center">
+                                <p className="text-gray-500 text-xs mb-1 uppercase tracking-wider">{opponent.abbreviation}</p>
+                                <div className="text-5xl font-bold text-white">{oppScore}</div>
+                              </div>
+                              <div className="w-16 h-16 rounded-xl flex items-center justify-center p-2 bg-gray-800/50">
+                                {/* eslint-disable-next-line @next/next/no-img-element */}
+                                <img src={getTeamLogo(opponent.abbreviation)} alt={opponent.name} className="w-full h-full object-contain" />
+                              </div>
                             </div>
                           </div>
                           {focusedGame.status === "Final" && (
@@ -461,19 +519,15 @@ export default function TeamHub({ teamId }: TeamHubProps) {
                   <div className="grid grid-cols-2 gap-4 mb-6">
                     <div className="bg-gray-950/50 p-4 rounded-xl border border-gray-800/50">
                       <p className="text-xs text-gray-500 uppercase tracking-wider mb-1">Height</p>
-                      <p className="text-lg font-semibold">{focusedPlayer.height || "N/A"}</p>
+                      <p className="text-lg font-semibold">{focusedPlayer.height ? convertHeightToMetric(focusedPlayer.height) : "N/A"}</p>
                     </div>
                     <div className="bg-gray-950/50 p-4 rounded-xl border border-gray-800/50">
                       <p className="text-xs text-gray-500 uppercase tracking-wider mb-1">Weight</p>
-                      <p className="text-lg font-semibold">{focusedPlayer.weight ? `${focusedPlayer.weight} lbs` : "N/A"}</p>
+                      <p className="text-lg font-semibold">{focusedPlayer.weight ? `${Math.round(parseInt(focusedPlayer.weight) / 2.205)} kg` : "N/A"}</p>
                     </div>
-                    <div className="bg-gray-950/50 p-4 rounded-xl border border-gray-800/50">
+                    <div className="bg-gray-950/50 p-4 rounded-xl border border-gray-800/50 col-span-2">
                       <p className="text-xs text-gray-500 uppercase tracking-wider mb-1">Country</p>
                       <p className="text-lg font-semibold">{focusedPlayer.country || "N/A"}</p>
-                    </div>
-                    <div className="bg-gray-950/50 p-4 rounded-xl border border-gray-800/50">
-                      <p className="text-xs text-gray-500 uppercase tracking-wider mb-1">College</p>
-                      <p className="text-lg font-semibold truncate">{focusedPlayer.college || "N/A"}</p>
                     </div>
                   </div>
 
